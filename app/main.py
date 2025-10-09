@@ -7,6 +7,8 @@ from random import randrange
 app = FastAPI()
 
 # -------------
+
+3.59
 # BASE MODEL
 # ------------
 
