@@ -1,5 +1,5 @@
 from typing import Union, Optional
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -7,11 +7,21 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
 
+# database models
+from . import models
+from .database import engine, get_db
+from sqlalchemy.orm import Session
+
+
+models.Base.metadata.create_all(bind=engine)
+
+# database models
+
 app = FastAPI()
 
 # -------------
 
-4.36.08
+ 5.18.08
 # BASE MODEL
 # ------------
 
@@ -19,7 +29,7 @@ class Post(BaseModel):
     title: str
     content: str
     published: bool = True
-    rating: Optional[int] = None
+    # rating: Optional[int] = None
 
 # Database connection with psycopg2 adapter
 while True:
@@ -77,13 +87,23 @@ my_posts =[
 async def root():
     return {'message': 'Hello World Message Api'}
 
+@app.get('/sqlalchemy')
+def test_posts(db: Session = Depends(get_db)):
+
+    posts = db.query(models.Post).all()
+
+    return {"data": posts}
 
 @app.get('/posts')
-def get_posts():
-    cursor.execute(""" SELECT * FROM posts """)
-    posts = cursor.fetchall()
-    print(posts)
-    return {'data': my_posts}
+def get_posts(db: Session=Depends(get_db)):
+    # raw SQL
+    # cursor.execute(""" SELECT * FROM posts """)
+    # posts = cursor.fetchall()
+
+    # ORM
+    posts = db.query(models.Post).all()
+
+    return {'data': posts}
 
 
 # @app.post('/createposts')
@@ -92,20 +112,25 @@ def get_posts():
 #     return {'new_post': f"title: {payload['title']} content: {payload['content']}"}
 
 @app.post('/posts', status_code=status.HTTP_201_CREATED)
-def create_post(post: Post):
-
+def create_post(post: Post, db: Session=Depends(get_db)):
+    print('-----create post--------', post)
+    # raw SQL
     # cursor.execute(f"")
     # check SQL injection
-    cursor.execute(""" INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """, (post.title, post.content, post.published))
-    new_post = cursor.fetchone()
-    conn.commit()
+    # cursor.execute(""" INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """, (post.title, post.content, post.published))
+    # new_post = cursor.fetchone()
+    # conn.commit()
+
+    # ORM
+    # new_post = models.Post(title=post.title, content=post.content, published=post.published)
+    # print(post.model_dump())
+    new_post = models.Post(**post.model_dump())
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+
     return {"data": new_post}
 
-
-def find_post(id):
-    for post in my_posts: 
-        if post['id'] == id:
-            return post
 
 @app.get('/posts/latest')
 def get_latest_post():
@@ -113,10 +138,13 @@ def get_latest_post():
     return {"data": post}
 
 @app.get('/posts/{id}')
-def get_post(id: str, response: Response):
+def get_post(id: str, response: Response, db: Session=Depends(get_db)):
     
-    cursor.execute(""" SELECT * FROM posts WHERE id = %s """, (id, ))
-    post = cursor.fetchone()
+    # raw SQL
+    # cursor.execute(""" SELECT * FROM posts WHERE id = %s """, (id, ))
+    # post = cursor.fetchone()
+
+    post = db.query(models.Post).filter(models.Post.id == id)
 
     if not post:
         # response.status_code = status.HTTP_404_NOT_FOUND
