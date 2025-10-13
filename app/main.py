@@ -21,7 +21,7 @@ app = FastAPI()
 
 # -------------
 
- 5.18.08
+ 5.30
 # BASE MODEL
 # ------------
 
@@ -144,7 +144,7 @@ def get_post(id: str, response: Response, db: Session=Depends(get_db)):
     # cursor.execute(""" SELECT * FROM posts WHERE id = %s """, (id, ))
     # post = cursor.fetchone()
 
-    post = db.query(models.Post).filter(models.Post.id == id)
+    post = db.query(models.Post).filter(models.Post.id == id).first()
 
     if not post:
         # response.status_code = status.HTTP_404_NOT_FOUND
@@ -161,26 +161,42 @@ def find_index_post(id):
 
 
 @app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: str, response: Response):
+def delete_post(id: str, response: Response, db: Session=Depends(get_db)):
 
-    cursor.execute(""" DELETE FROM posts WHERE id = %s RETURNING * """, (id, ))
-    post = cursor.fetchone()
-    conn.commit()
-    if post == None:
+    # raw sql
+    # cursor.execute(""" DELETE FROM posts WHERE id = %s RETURNING * """, (id, ))
+    # post = cursor.fetchone()
+    # conn.commit()
+
+    post = db.query(models.Post).filter(models.Post.id == id)
+
+    if post.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post with id: {id} was not found!")
+    
+    # ORM
+    post.delete(synchronize_session=False)
+    db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.put('/posts/{id}', status_code=status.HTTP_200_OK)
-def update_post(id: str, post: Post):
+def update_post(id: str, updated_post: Post, db: Session=Depends(get_db)):
 
-    cursor.execute(""" UPDATE posts SET title = %s, content = %s, published = %s WHERE id=%s RETURNING * """, (post.title, post.content, post.published, id, ))
-    update_post = cursor.fetchone()
-    conn.commit()
-    if update_post == None:
+    # raw SQL
+    # cursor.execute(""" UPDATE posts SET title = %s, content = %s, published = %s WHERE id=%s RETURNING * """, (post.title, post.content, post.published, id, ))
+    # update_post = cursor.fetchone()
+    # conn.commit()
+
+    # ORM
+    post_query = db.query(models.Post).filter(models.Post.id ==id)
+
+    if post_query.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post with id: {id} does not exist.")
-    
-    return {'data': update_post}
+
+    post_query.update(updated_post.model_dump(), synchronize_session=False)
+    db.commit()
+
+    return {'data': post_query.first()}
