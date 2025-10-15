@@ -26,3 +26,17 @@ class Post(Base):
     content: Mapped[str] = mapped_column(String, nullable=False)
     published: Mapped[bool] = mapped_column(Boolean, server_default=text("true"))
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[str] = mapped_column(
+        String,
+        primary_key=True,
+        nullable=False,
+        default=lambda: str(uuid.uuid4()),
+        server_default=text("gen_random_uuid()")
+    )
+    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    password: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
