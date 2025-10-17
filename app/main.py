@@ -10,12 +10,12 @@ from . import models, schemas
 from .database import engine, get_db
 from sqlalchemy.orm import Session
 from . import utils
-from .routes import post, user
+from .routes import post, user, auth
 
 
 models.Base.metadata.create_all(bind=engine)
 
-6.57
+# 6.57
 
 app = FastAPI()
 
@@ -75,6 +75,7 @@ my_posts =[
 
 app.include_router(post.router)
 app.include_router(user.router)
+app.include_router(auth.router)
 
 # path operations
 @app.get('/')
