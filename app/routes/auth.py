@@ -12,8 +12,6 @@ def login(user_credentials: schemas.UserLogin, db: Session=Depends(get_db)):
     
     auth_user = db.query(models.User).filter(models.User.email == user_credentials.email).first()
 
-    # print('____auth_user_____', auth_user)
-
     if not auth_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Invalid credentials.')
     
