@@ -15,6 +15,9 @@ from .database import Base
 class Post(Base):
     __tablename__ = "posts"
 
+    class Config:
+        from_attributes = True
+
     id: Mapped[str] = mapped_column(
         String,
         primary_key=True,
@@ -27,9 +30,16 @@ class Post(Base):
     published: Mapped[bool] = mapped_column(Boolean, server_default=text("true"))
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
+    class Config:
+        from_attributes = True
+
 
 class User(Base):
     __tablename__ = "users"
+    
+    class Config:
+        from_attributes = True
+
     id: Mapped[str] = mapped_column(
         String,
         primary_key=True,

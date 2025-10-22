@@ -15,11 +15,9 @@ from .routes import post, user, auth
 
 models.Base.metadata.create_all(bind=engine)
 
-# 6.57
+__7.31.28
 
 app = FastAPI()
-
-# 5.30
 
 # Database connection with psycopg2 adapter
 while True:

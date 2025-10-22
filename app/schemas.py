@@ -12,6 +12,9 @@ class PostBase(BaseModel):
     published: bool = True
     # rating: Optional[int] = None
 
+    class Config:
+        from_attributes = True
+
 
 class PostCreate(PostBase):
     pass
@@ -25,8 +28,8 @@ class PostResponse(PostBase):
     id: str
     created_at: datetime
 
-    class config:
-        orm_mode = True
+    class Config:
+        from_attributes = True
 
 
 class UserCreate(BaseModel):
@@ -39,7 +42,7 @@ class UserResponse(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLogin(BaseModel):
     email: str

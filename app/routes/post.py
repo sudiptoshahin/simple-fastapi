@@ -29,8 +29,8 @@ def get_posts(db: Session=Depends(get_db)):
 #     return {'new_post': f"title: {payload['title']} content: {payload['content']}"}
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
-def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), get_current_user: int=Depends(oauth2.get_current_user)):
-    print('-----create post--------', post)
+def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), user_id: int=Depends(oauth2.get_current_user)):
+    print('-----user_id--------', user_id)
     # raw SQL
     # cursor.execute(f"")
     # check SQL injection
