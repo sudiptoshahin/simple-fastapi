@@ -29,8 +29,8 @@ def get_posts(db: Session=Depends(get_db)):
 #     return {'new_post': f"title: {payload['title']} content: {payload['content']}"}
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
-def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), user_id: int=Depends(oauth2.get_current_user)):
-    print('-----user_id--------', user_id)
+def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), current_user: int=Depends(oauth2.get_current_user)):
+    print('-----user_id--------', current_user)
     # raw SQL
     # cursor.execute(f"")
     # check SQL injection
@@ -50,7 +50,7 @@ def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), user_id: 
 
 
 @router.get('/{id}', response_model=schemas.PostResponse)
-def get_post(id: str, response: Response, db: Session=Depends(get_db)):
+def get_post(id: str, response: Response, db: Session=Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     
     # raw SQL
     # cursor.execute(""" SELECT * FROM posts WHERE id = %s """, (id, ))

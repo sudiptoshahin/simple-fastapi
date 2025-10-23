@@ -8,7 +8,7 @@ router = APIRouter(tags=['Authentication'])
 
 7.28
 
-@router.post('/login')
+@router.post('/login', response_model=schemas.Token )
 def login(user_credentials: schemas.UserLogin, db: Session=Depends(get_db)):
     
     auth_user = db.query(models.User).filter(models.User.email == user_credentials.email).first()
