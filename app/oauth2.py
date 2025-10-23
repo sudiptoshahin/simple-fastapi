@@ -31,7 +31,7 @@ def verify_access_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
         
-        id: str = payload.get("users_id")
+        id: str = payload.get("user_id")
 
         if id is None:
             raise credentials_exception
@@ -44,6 +44,10 @@ def verify_access_token(token: str, credentials_exception):
 
 
 def get_current_user(token: str = Depends(oauth2_schema)):
-    credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f'Could not vaidate credentials', headers={"WWW-Authenticate": "Bearer"})
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=f'Could not vaidate credentials',
+        headers={"WWW-Authenticate": "Bearer"}
+    )
 
     return verify_access_token(token=token, credentials_exception=credentials_exception)

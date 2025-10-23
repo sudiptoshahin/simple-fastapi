@@ -56,3 +56,9 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str]=None
+
+
+class APIResponse(BaseModel):
+    code: int
+    status: str
+    message: str
