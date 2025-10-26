@@ -1,7 +1,7 @@
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, DeclarativeBase
 from sqlalchemy.sql.expression import text
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import mapped_column, relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -29,6 +29,12 @@ class Post(Base):
     content: Mapped[str] = mapped_column(String, nullable=False)
     published: Mapped[bool] = mapped_column(Boolean, server_default=text("true"))
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    owner_id: Mapped[str] = mapped_column(
+        String, 
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+    owner = relationship("User")
 
     class Config:
         from_attributes = True

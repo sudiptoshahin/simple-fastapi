@@ -11,7 +11,7 @@ SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/simple-
 try:
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
 except OperationalError as err:
-    print(f"Database connection failed!", err)
+    print(f"_____________Database connection failed!______________", err)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
