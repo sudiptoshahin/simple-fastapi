@@ -56,3 +56,14 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+    user_id: Mapped[str] = mapped_column(
+        String, 
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    post_id: Mapped[str] = mapped_column(String, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)

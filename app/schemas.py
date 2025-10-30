@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
-
+from pydantic.types import conint
 
 
 class UserCreate(BaseModel):
@@ -66,3 +66,8 @@ class APIResponse(BaseModel):
     code: int
     status: str
     message: str
+
+
+class Vote(BaseModel):
+    post_id: str
+    dir: conint(le=1) # type: ignore
