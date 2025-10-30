@@ -8,7 +8,7 @@ router = APIRouter(tags=['Authentication'])
 
 7.28
 
-@router.post('/login')
+@router.post('/login', response_model=schemas.Token)
 def login(user_credentials: schemas.UserLogin, db: Session=Depends(get_db)):
     
     auth_user = db.query(models.User).filter(models.User.email == user_credentials.email).first()
@@ -17,7 +17,7 @@ def login(user_credentials: schemas.UserLogin, db: Session=Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalid credentials.')
     
     if not utils.verify_password(user_credentials.password, auth_user.password):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalid credentials.')
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Password doesnt match!')
     
     access_token = oauth2.create_access_token(data={"user_id": auth_user.id})
     
