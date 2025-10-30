@@ -4,6 +4,7 @@ from . import schemas, database, models
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from .config import settings
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')
 
@@ -11,9 +12,9 @@ oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')
 # ALGORITHM
 # expiration time
 
-SECRET_KEY = "2392e3p2ke2p3okep23o0ek23023k2pko3e;2podjko23hfoinonwlkdfjwlkj"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUITES = 60
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
+ACCESS_TOKEN_EXPIRE_MINUITES = settings.access_token_expire_minuites
 
 
 def create_access_token(data: dict):
@@ -52,7 +53,6 @@ def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(
     )
 
     token = verify_access_token(token=token, credentials_exception=credentials_exception)
-
-    user = db.query(models.User) .filter(models.User.id == token.id).first()
+    user = db.query(models.User).filter(models.User.id == token.id).first()
 
     return user

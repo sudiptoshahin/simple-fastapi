@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import get_db
 from .. import utils, oauth2
+from sqlalchemy.exc import SQLAlchemyError
 
 router = APIRouter(
     prefix='/posts', # /post/{id}
@@ -12,13 +13,22 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=List[schemas.PostResponse])
-def get_posts(db: Session=Depends(get_db), current_user: str=Depends(oauth2.get_current_user), limit: int=10):
+def get_posts(db: Session=Depends(get_db), current_user: str=Depends(oauth2.get_current_user), limit: int=30, skip: int=0, search: Optional[str]=""):
     # raw SQL
     # cursor.execute(""" SELECT * FROM posts """)
     # posts = cursor.fetchall()
-
     # ORM
-    posts = db.query(models.Post).filter(models.Post.owner_id == current_user.id).limit(limit)
+    try:
+        posts = (
+            db.query(models.Post)
+            .filter(models.Post.title.contains(search))
+            .limit(limit)
+            .offset(skip)
+            .all()
+        )
+    except SQLAlchemyError as e:
+        print(f"Database error: {e}")
+        posts = []
 
     return posts
 
@@ -30,7 +40,6 @@ def get_posts(db: Session=Depends(get_db), current_user: str=Depends(oauth2.get_
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
 def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), current_user: str=Depends(oauth2.get_current_user)):
-    print('-----user_id--------', current_user.id)
     # raw SQL
     # cursor.execute(f"")
     # check SQL injection
