@@ -15,7 +15,7 @@ from .routes import post, user, auth
 
 models.Base.metadata.create_all(bind=engine)
 
-# __7.31.28
+# __8.43.16
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ while True:
     try:
         conn = psycopg2.connect(host='localhost', database='simple-fastapi', user='postgres', password='postgres', cursor_factory=RealDictCursor)
         cursor = conn.cursor()
-        print('Database connection was successfull!')
+        print('_________Database connection was successfull!__________')
         break
     except Exception as error:
         print(f"Connecting to database failed! \nError: {error}")

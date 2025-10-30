@@ -5,12 +5,13 @@ from sqlalchemy.exc import OperationalError
 
 # connection string
 # 'postgresql://<username>:<password>@<ip-address/hostname>/<database_name>'
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:password123@localhost:5432/simple-fastapi'
+# SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:password123@localhost:5432/simple-fastapi'
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/simple-fastapi'
 
 try:
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
 except OperationalError as err:
-    print(f"Database connection failed!", err)
+    print(f"_____________Database connection failed!______________", err)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

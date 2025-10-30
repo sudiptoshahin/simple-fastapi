@@ -2,6 +2,24 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
+
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserResponse(BaseModel):
+    id: str
+    email: EmailStr
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+    
 # -------------
 # BASE MODEL
 # ------------
@@ -27,26 +45,12 @@ class PostUpdate(PostBase):
 class PostResponse(PostBase):
     id: str
     created_at: datetime
+    owner_id: str
+    owner: UserResponse
 
     class Config:
         from_attributes = True
 
-
-class UserCreate(BaseModel):
-    email: EmailStr
-    password: str
-
-class UserResponse(BaseModel):
-    id: str
-    email: EmailStr
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-class UserLogin(BaseModel):
-    email: str
-    password: str
 
 
 class Token(BaseModel):
@@ -56,3 +60,9 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str]=None
+
+
+class APIResponse(BaseModel):
+    code: int
+    status: str
+    message: str

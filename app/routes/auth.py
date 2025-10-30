@@ -6,8 +6,6 @@ from .. import schemas, models, utils, oauth2
 router = APIRouter(tags=['Authentication'])
 
 
-7.28
-
 @router.post('/login', response_model=schemas.Token)
 def login(user_credentials: schemas.UserLogin, db: Session=Depends(get_db)):
     
