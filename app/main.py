@@ -8,7 +8,7 @@ from .routes import post, user, auth, vote
 models.Base.metadata.create_all(bind=engine)
 print('___Database_connected____')
 
-10.0.0
+10.36.37
 
 app = FastAPI()
 
