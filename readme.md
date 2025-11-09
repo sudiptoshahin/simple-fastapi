@@ -125,3 +125,58 @@ run the below command:
 ```set -o allexport; source ~/.env; set +o allexport```
 
 If we restart our machine it will remove those env variable so that, we have to put ```set -o allexport; source ~/.env; set +o allexport``` this command to ~/.profile file
+
+#### study
+In .profile file ```set -o allexport; source ~/.env; set +o allexport``` some time not running
+due to ```.env``` permission. Set its permission to 600 for the user,
+
+
+#### Connect app from outside. But it need to manually run 
+```uvicorn --host 0.0.0.0 app.main:app``` 
+
+
+Need to install
+```
+pip install gunicorn
+pip install httptools
+pip install uvtools
+
+
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+
+# Check all the connection
+ps -aef | grep -u gunicorn
+```
+
+### Need to run in background and reboot while server reboot
+
+#### services that are run in the system
+```cd /etc/systemd/system```
+
+Define service in project directory
+#### Creating service
+```
+sudo nano simple-fastapi.service
+```
+Now copy the ```gunicorn.service``` file text to ```/etc/systemd/systemsimple-fastapi.service```
+```and run sudo start system simple-fastapi.service```
+
+```
+sudo systemctl restart simple-fastapi.service
+sudo systemctl daemon-reload
+sudo systemctl status simple-fastapi.service
+
+# Enable or Disable
+sudo systemctl enable simple-fastapi.service
+sudo systemctl disable simple-fastapi.service
+```
+
+
+Why nginx is optimized
+
+SSL termination
+
+
+## Nginx setup
+```
+sudo apt install nginx -y
