@@ -110,3 +110,18 @@ sudo adduser <username>
 # give user the admin privilidge
 usermod -aG sudo <username>
 ```
+
+
+### Setup the environment variable to the server
+```
+# check env variables
+:~printenv
+:~export <MY_NAME>=MY_VALUE
+cd ~
+touch .env
+```
+Create .env file and copy project all env to server ~/.env file assign the desired and then 
+run the below command:
+```set -o allexport; source ~/.env; set +o allexport```
+
+If we restart our machine it will remove those env variable so that, we have to put ```set -o allexport; source ~/.env; set +o allexport``` this command to ~/.profile file
