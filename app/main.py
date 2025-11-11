@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 models.Base.metadata.create_all(bind=engine)
 print('___Database_connected____')
 
-13.10.42
+# 13.10.42
 
 app = FastAPI()
 
