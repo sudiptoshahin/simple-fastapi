@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends
 # database models
-from . import models
-from .database import engine
-from .routes import post, user, auth, vote
+from app import models
+from app.database import engine
+from app.routes import post, user, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 
 

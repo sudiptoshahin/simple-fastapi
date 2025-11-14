@@ -134,8 +134,17 @@ due to ```.env``` permission. Set its permission to 600 for the user,
 #### Connect app from outside. But it need to manually run 
 ```uvicorn --host 0.0.0.0 app.main:app``` 
 
+##### Host can be unreachable due to port binding or firewall allow
+```
+uvicorn --host 0.0.0.0 --port 8000 app.main:app
+sudo ufw allow 8000/tcp
+sudo ufw reload
+# checking
+sudo ufw status
+``` 
 
-Need to install
+
+##### Need to install
 ```
 pip install gunicorn
 pip install httptools

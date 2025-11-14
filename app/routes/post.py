@@ -10,7 +10,7 @@ from sqlalchemy import func
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter(
-    prefix='/posts', # /post/{id}
+    prefix='/api/v1/posts', # /post/{id}
     tags=['Posts']
 )
 

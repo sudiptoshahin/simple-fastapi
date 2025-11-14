@@ -1,12 +1,12 @@
 from typing import Union, Optional, List
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
-from .. import models, schemas
-from ..database import engine, get_db
+from app import models, schemas
+from app.database import engine, get_db
 from sqlalchemy.orm import Session
-from .. import utils
+from app import utils
 
 router = APIRouter(
-    prefix='/users',
+    prefix='/api/v1/users',
     tags=['Users']
 )
 
