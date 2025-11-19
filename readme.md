@@ -242,9 +242,12 @@ sudo certbot certonly --nginx
 Restart nginx
 
 ### Setup a firewall
+
+```
 sudo ufw status
 sudo ufw allow http
 sudo ufw allow https
 sudo ufw allow ssh
 sudo ufw delete allow 5432
 sudo ufw enable
+```
