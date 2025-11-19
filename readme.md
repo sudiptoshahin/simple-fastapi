@@ -163,6 +163,22 @@ ps -aef | grep -u gunicorn
 ```cd /etc/systemd/system```
 
 Define service in project directory
+```
+[Unit]
+Description=gunicorn instance to server api
+After=network.target
+
+[Service]
+User=rootuser2
+Group=rootuser2
+WorkingDirectory=/home/rootuser2/app/src
+Environment="PATH=/home/rootuser2/app/env/bin"
+EnvironmentFile=/home/rootuser2/.env
+ExecStart=/home/rootuser2/app/env/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
+```
 #### Creating service
 ```
 sudo nano simple-fastapi.service
@@ -189,3 +205,46 @@ SSL termination
 ## Nginx setup
 ```
 sudo apt install nginx -y
+
+nano /etc/nginx/sites-available/default
+server {
+    listen 80 ;
+    listen [::]:80 ;
+
+    server_name _; # replace with specific domaiin name like helloworld.com
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_http_version 1.1;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_redirect off;
+    }
+
+}
+```
+
+1. Go to certbot site for https setup
+```https://certbot.eff.org/```
+Some commands
+```
+sudo snap install --classic certbot
+
+Prepare the Certbot command
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo certbot --nginx
+sudo certbot certonly --nginx
+```
+Restart nginx
+
+### Setup a firewall
+sudo ufw status
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw allow ssh
+sudo ufw delete allow 5432
+sudo ufw enable
