@@ -251,3 +251,8 @@ sudo ufw allow ssh
 sudo ufw delete allow 5432
 sudo ufw enable
 ```
+
+
+---------------------
+## Docker setup
+---------------------
