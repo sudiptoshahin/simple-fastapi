@@ -256,3 +256,36 @@ sudo ufw enable
 ---------------------
 ## Docker setup
 ---------------------
+**Write docker image file**
+```Dockerfile
+FROM python:3.13
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+```bash
+docker build -t project_dir .
+```
+
+```yml
+version: "3"
+services:
+  api:
+    build: .
+    port:
+      - <port_on_localhost>:<port_on_container>
+    env_file:
+        - ./.env
+    environment:
+        - ENV_VAR_1=VALUE
+        - ENV_VAR_2=VALUE2
+
+
+```
