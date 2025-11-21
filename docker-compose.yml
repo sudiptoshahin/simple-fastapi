@@ -1,10 +1,23 @@
 version: "3"
 
 services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: simple-fastapi
+    ports:
+      - "54432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   api:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      # - <sync_local_dir>:<sync_docker_dir>:<security_command>
+      - ./:/usr/src/app:ro
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
       DATABASE_HOSTNAME: postgres
       DATABASE_PORT: 5432
@@ -16,16 +29,6 @@ services:
       ACCESS_TOKEN_EXPIRE_MINUITES: 60
     depends_on:
       - postgres
-  
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: simple-fastapi
-    ports:
-      - "5432:54432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
