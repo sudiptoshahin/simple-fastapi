@@ -39,6 +39,8 @@ def downgrade() -> None:
 ### Automatically generate from models
 ```alembic revision --autogenerate -m 'auto votes'```
 
+### Upgrade
+```alembic upgrade head```
 
 -----------------------
 ### Heroku setups
@@ -277,15 +279,50 @@ docker build -t project_dir .
 ```yml
 version: "3"
 services:
+  postgres:
+    images:
+        - docker hub image name
+        - postgres:15
+    ports:
+        - <port_on_localhost>:<port_on_container>
+        - "5432:5432"
+    
   api:
     build: .
     port:
       - <port_on_localhost>:<port_on_container>
+    volumes:
+    # - <sync_local_dir>:<sync_docker_dir>:<security_command>
+      - ./:/usr/src/app:ro
+    # Command that reload the application server
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     env_file:
         - ./.env
     environment:
-        - ENV_VAR_1=VALUE
+        - ENV_VAR_1=${REFERENCE_ENV_VARIABLE_WHICH_WILL_COME_FROM_HOST_MACHINE}
         - ENV_VAR_2=VALUE2
+        - ALL_ENVIRONMENT FOR RUN THE APPLICATION
+    depends_on:
+        - DEPENDS ON MUST BE A SERVICE
+        - postgres
+```
 
+*For initially upload the image file*
+```bash
+# after everything done
+docker tag <local-image> <dockerhub-username>/<repo-name>:<tag>
+
+docker push mdssh/simple-fastapi:latest
+
+# For build image
+docker build -t simple-fastapi-api .
+docker tag simple-fastapi-api sudiptoshine/simple-fastapi:1.0
+docker push sudiptoshine/simple-fastapi:1.0
+
+
+# start docker compose file
+docker compose -f <compose_file_name> up -d
+
+docker compose -f <compose_file_name> down
 
 ```

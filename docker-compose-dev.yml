@@ -11,11 +11,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   api:
+    image: mdssh/simple-fastapi:latest
     build: .
     ports:
       - "8000:8000"
     volumes:
-      # - <sync_local_dir>:<sync_docker_dir>:<security_command>
       - ./:/usr/src/app:ro
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
