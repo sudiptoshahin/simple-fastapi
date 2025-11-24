@@ -4,17 +4,6 @@ from app import schemas
 from tests.database import client, session
 from app.config import settings
 
-@pytest.fixture
-def test_user(client):
-    user_data = { "email": "sudipto.shine@gmail.com", "password": "password" }
-    res = client.post('/api/v1/users/', json=user_data)
-    
-    assert res.status_code == 201
-
-    new_user = res.json()
-    new_user['password'] = user_data['password']
-    return new_user
-
 
 # def test_root(client):
 #     res = client.get('/')
