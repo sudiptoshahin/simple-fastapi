@@ -326,3 +326,17 @@ docker compose -f <compose_file_name> up -d
 docker compose -f <compose_file_name> down
 
 ```
+
+#### Testing with pytest: Important commands
+```bash
+pytest -v
+pytest -s
+
+# specific files
+pytest -v -s tests/<test_file_name.py>
+
+# disable warnings and stoping test while get an error
+pytest --disable-warnings -v -x
+pytest --disable-warnings -v tests/<test_file_name.py>
+
+```

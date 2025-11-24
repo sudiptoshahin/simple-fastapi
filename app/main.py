@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, status
 # database models
 from app import models
 from app.database import engine
@@ -7,10 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 # db connection
-models.Base.metadata.create_all(bind=engine)
-print('___Database_connected____')
+# models.Base.metadata.create_all(bind=engine)
 
-# 14.17.23
+# 16.19.40
 
 app = FastAPI()
 
@@ -40,5 +39,5 @@ app.include_router(vote.router)
 # path operations
 @app.get('/')
 async def root():
-    return {'message': '___Hello World Message Api____'}
+    return {'message': 'Hello World'}
 
