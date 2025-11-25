@@ -24,6 +24,14 @@ class UserLogin(BaseModel):
 # BASE MODEL
 # ------------
 
+class Post(BaseModel):
+    id: str
+    title: str
+    content: str
+    published: bool
+    owner_id: str
+    created_at: str
+
 class PostBase(BaseModel):
     title: str
     content: str
