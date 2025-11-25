@@ -54,7 +54,7 @@ class User(Base):
         server_default=text("gen_random_uuid()")
     )
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    password: Mapped[str] = mapped_column(String, nullable=False, unique=True, max_length=72)
+    password: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     phone_number: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
