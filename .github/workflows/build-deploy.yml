@@ -19,18 +19,18 @@ jobs:
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
       DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
+      DATABASE_NAME: test-${{secrets.DATABASE_NAME}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUITES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUITES}}
     
     services:
       postgres:
-        image: postgres
+        image: postgres:15
         env:
           POSTGRES_USER: ${{secrets.DATABASE_USERNAME}}
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          POSTGRES_DB: test-simple-fastapi
+          POSTGRES_DB: test-${{secrets.DATABASE_NAME}}
         ports: 
           - 5432:5432
         options: >-
