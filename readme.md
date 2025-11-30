@@ -368,3 +368,11 @@ Continuous Delivery
 * Github Actions
 * Travis CI
 * Curcle ci
+
+**Follow the doc**
+https://docs.github.com/en/actions/get-started/quickstart
+
+#### Flow
+* First create a directory called *.github/workflow*
+* create a file ```<file_name>.yml```
+
