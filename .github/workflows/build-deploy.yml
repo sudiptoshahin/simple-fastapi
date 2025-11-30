@@ -54,7 +54,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Wait for Postgres to be ready
         run: |
-          until pg_isready -h test-simple-fastapi -p $DATABASE_PORT -U $DATABASE_USERNAME; do
+          until pg_isready -h $DATABASE_HOSTNAME -p $DATABASE_PORT -U $DATABASE_USERNAME; do
             echo "Waiting for Postgres..."
             sleep 1
           done
