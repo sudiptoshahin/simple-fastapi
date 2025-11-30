@@ -375,4 +375,4 @@ https://docs.github.com/en/actions/get-started/quickstart
 #### Flow
 * First create a directory called *.github/workflow*
 * create a file ```<file_name>.yml```
-
+* add commands for automation
