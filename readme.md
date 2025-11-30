@@ -340,3 +340,31 @@ pytest --disable-warnings -v -x
 pytest --disable-warnings -v tests/<test_file_name.py>
 
 ```
+
+------------------------------------
+## CI/CD (*Continuous intregation and Continuous Delivery*)
+------------------------------------
+
+Manual process
+Make Changes to code -> Commit changes -> Run test -> Build Image -> Deploy
+
+Automated process
+
+* Make Changes
+* Commit changes
+
+Continuous intregation
+* Pull source code
+* Install Dependencies
+* Run Automated tests
+* Build Images
+
+Continuous Delivery
+* Grab image/code
+* Update production
+
+**Tools**
+* Jenkins
+* Github Actions
+* Travis CI
+* Curcle ci
