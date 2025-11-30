@@ -28,6 +28,7 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_USER: ${{secrets.DATABASE_USERNAME}}
           POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
           POSTGRES_DB: test-simple-fastapi
         ports: 
